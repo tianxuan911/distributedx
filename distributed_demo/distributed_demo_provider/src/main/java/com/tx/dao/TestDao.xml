@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.sandwish.trademark.caseflow.dao.InvoiceMapper" >
+  
+  	<!-- 保存发票 -->
+	<insert id="insertInvoice" parameterType="Invoice">
+		insert into t_invoice  
+		(
+			invoice_type,
+			case_id,
+			<if test="companyName != null and companyName != ''" > company_name, </if>
+			<if test="invoiceTitle != null and invoiceTitle != ''" > invoice_title, </if>
+			<if test="taxNumber != null and taxNumber != ''" > tax_number, </if>
+			<if test="bankNumber != null and bankNumber != ''" > bank_number, </if>
+			<if test="bankName != null and bankName != ''" > bank_name, </if>
+			<if test="companyRegistAddr != null and companyRegistAddr != ''" > company_regist_addr, </if>
+			<if test="telephone != null and telephone != ''" > telephone, </if>
+			<if test="receiver != null and receiver != ''" > receiver, </if>
+			<if test="receiverPhone != null and receiverPhone != ''" > receiver_phone, </if>
+			<if test="registerPhone != null and registerPhone != ''" > register_phone, </if>
+			<if test="receiverProvince != null and receiverProvince != ''" > receiver_province, </if>
+			<if test="receiverCity != null and receiverCity != ''" > receiver_city, </if>
+			<if test="receiverCounty != null and receiverCounty != ''" > receiver_county, </if>
+			<if test="receiverStreet != null and receiverStreet != ''" > receiver_street, </if>
+			<if test="creator != null and creator != ''" > creator, </if>
+			<if test="attachment1 != null and attachment1 != ''" > attachment1, </if>
+			<if test="attachment2 != null and attachment2 != ''" > attachment2, </if>
+			create_time			
+		) values
+		(
+			#{invoiceType},
+			#{caseId},
+			<if test="companyName != null and companyName != ''" > #{companyName}, </if>
+			<if test="invoiceTitle != null and invoiceTitle != ''" > #{invoiceTitle}, </if>
+			<if test="taxNumber != null and taxNumber != ''" > #{taxNumber}, </if>
+			<if test="bankNumber != null and bankNumber != ''" > #{bankNumber}, </if>
+			<if test="bankName != null and bankName != ''" > #{bankName}, </if>
+			<if test="companyRegistAddr != null and companyRegistAddr != ''" > #{companyRegistAddr}, </if>
+			<if test="telephone != null and telephone != ''" > #{telephone}, </if>
+			<if test="receiver != null and receiver != ''" > #{receiver}, </if>
+			<if test="receiverPhone != null and receiverPhone != ''" > #{receiverPhone}, </if>
+			<if test="registerPhone != null and registerPhone != ''" > #{registerPhone}, </if>
+			<if test="receiverProvince != null and receiverProvince != ''" > #{receiverProvince}, </if>
+			<if test="receiverCity != null and receiverCity != ''" > #{receiverCity}, </if>
+			<if test="receiverCounty != null and receiverCounty != ''" > #{receiverCounty}, </if>
+			<if test="receiverStreet != null and receiverStreet != ''" > #{receiverStreet}, </if>
+			<if test="creator != null and creator != ''" > #{creator}, </if>
+			<if test="attachment1 != null and attachment1 != ''" > #{attachment1}, </if>
+			<if test="attachment2 != null and attachment2 != ''" > #{attachment2}, </if>
+			now()
+		)
+		<!-- 返回主键 -->
+		<selectKey resultType="Integer" keyProperty="invoiceId">
+			SELECT last_insert_id() AS invoiceId
+		</selectKey>
+	</insert>
+	
+	<!-- 获取发票详情 -->
+	<select id="getCaseInvoiceDetail" parameterType="Invoice" resultType="Invoice">
+		select i.case_id as caseId,
+			i.invoice_id as invoiceId,
+			i.company_name as companyName,
+			i.invoice_title as invoiceTitle,
+			i.tax_number as taxNumber,
+			i.bank_number as bankNumber,
+			i.bank_name as bankName,
+			i.company_regist_addr as companyRegistAddr,
+			i.telephone,
+			i.receiver,
+			i.invoice_type as invoiceType,
+			i.receiver_phone as receiverPhone,
+			i.register_phone as registerPhone,
+			i.receiver_province as receiverProvince,
+			i.receiver_city as receiverCity,
+			i.receiver_county as receiverCounty,
+			i.receiver_street as receiverStreet,
+			caseinfo.case_number as caseNumber,
+			bill.bill_amount as billAmount,
+			i.creator,
+			u.real_name as creatorName,
+			i.attachment1,
+			i.attachment2,
+			r1.resource_uri as attachment1Url,
+			r2.resource_uri as attachment2Url,
+		    casetype.case_type_name as invoiceProject,
+			(select b.name from t_province b where b.code=i.receiver_province) as receiverProvinceName,
+			(select b.name from t_city b where b.code=i.receiver_city) as receiverCityName,
+			(select b.name from t_area b where b.code=i.receiver_county) as receiverCountyName
+		from t_invoice i
+		inner join t_user_info u on i.creator = u.user_id
+		inner join t_case_info caseinfo on i.case_id = caseinfo.case_id
+		inner join t_case_type casetype on caseinfo.case_type = casetype.case_type
+		left join t_bill bill on i.case_id = bill.case_id
+		left join t_resource r1 on r1.resource_id = i.attachment1
+		left join t_resource r2 on r2.resource_id = i.attachment2
+		where 1=1
+		<if test="caseId != null and caseId != ''" > and i.case_id = #{caseId} </if>
+		<if test="invoiceId != null and invoiceId != ''" > and i.invoice_id = #{invoiceId} </if>
+	</select>
+	
+	<!-- 修改发票信息 -->
+	<update id="updateInvoice" parameterType="Invoice">
+		update t_invoice set 
+		create_time = create_time
+		<if test="companyName != null and companyName != ''" >, company_name = #{companyName} </if>
+		<if test="invoiceTitle != null and invoiceTitle != ''" >, invoice_title = #{invoiceTitle} </if>
+		<if test="taxNumber != null and taxNumber != ''" >, tax_number = #{taxNumber} </if>
+		<if test="bankNumber != null and bankNumber != ''" >, bank_number = #{bankNumber}</if>
+		<if test="bankName != null and bankName != ''" >, bank_name = #{bankName} </if>
+		<if test="companyRegistAddr != null and companyRegistAddr != ''" >, company_regist_addr = #{companyRegistAddr}</if>
+		<if test="telephone != null and telephone != ''" >, telephone = #{telephone}</if>
+		<if test="receiver != null and receiver != ''" >, receiver = #{receiver}</if>
+		<if test="receiverPhone != null and receiverPhone != ''" >, receiver_phone = #{receiverPhone} </if>
+		<if test="registerPhone != null and registerPhone != ''" >, register_phone = #{registerPhone} </if>
+		<if test="receiverProvince != null and receiverProvince != ''" >, receiver_province = #{receiverProvince}</if>
+		<if test="receiverCity != null and receiverCity != ''" >, receiver_city = #{receiverCity}</if>
+		<if test="receiverCounty != null and receiverCounty != ''" >, receiver_county = #{receiverCounty} </if>
+		<if test="receiverStreet != null and receiverStreet != ''" >, receiver_street = #{receiverStreet} </if>
+		<if test="attachment1 != null and attachment1 != ''" >, attachment1 = #{attachment1} </if>
+		<if test="attachment2 != null and attachment2 != ''" >, attachment2 = #{attachment2}</if>
+		where invoice_id = #{invoiceId}
+	</update>
+	
+	<!-- 删除发票的附件id -->
+	<update id="removeAttachment"  parameterType="Invoice">
+		update t_invoice set ${attachmentField} = null where invoice_id = #{invoiceId}
+	</update>
+	
+</mapper>
