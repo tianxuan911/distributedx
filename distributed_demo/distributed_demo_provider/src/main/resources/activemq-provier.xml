@@ -13,11 +13,19 @@
             </bean>
         </property>
     </bean>
-    <!-- 定义消息队列（Queue） -->
+    <!-- 定义消息队列（Queue） 多用于点对点通信,一个消息只能被一个客户端获取 -->
     <bean id="queueDestination" class="org.apache.activemq.command.ActiveMQQueue">
         <!-- 设置消息队列的名字 -->
         <constructor-arg>
             <value>testSpringQueue</value>
+        </constructor-arg>
+    </bean>
+
+    <!-- 定义话题（Topic）多用于消息的推送[订阅-发布],同一个消息可以被所有订阅的客户端获取 -->
+    <bean id="topicDestination" class="org.apache.activemq.command.ActiveMQTopic">
+        <!-- 设置话题的名字 -->
+        <constructor-arg>
+            <value>testSpringTopic</value>
         </constructor-arg>
     </bean>
     <!-- Spring JMS Template -->
