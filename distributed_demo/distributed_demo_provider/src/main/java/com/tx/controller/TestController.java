@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
+import javax.jms.TextMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -53,7 +54,17 @@ public class TestController {
         jmsTemplate.send(new MessageCreator() {
             @Override
             public Message createMessage(Session session) throws JMSException {
-                return session.createTextMessage(message);
+                TextMessage message1 = session.createTextMessage(message+"A");
+                message1.setStringProperty("userId","A");
+                return message1;
+            }
+        });
+        jmsTemplate.send(new MessageCreator() {
+            @Override
+            public Message createMessage(Session session) throws JMSException {
+                TextMessage message1 = session.createTextMessage(message+"B");
+                message1.setStringProperty("userId","B");
+                return message1;
             }
         });
         try {
