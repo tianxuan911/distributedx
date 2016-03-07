@@ -40,10 +40,14 @@
 
     <bean id="consumerMessageListenerOne" class="com.tx.util.ConsumerMessageListener" />
     <bean id="consumerMessageListenerTwo" class="com.tx.util.ConsumerMessageListenerTwo" />
+    <bean id="messageConverter" class="org.springframework.jms.support.converter.SimpleMessageConverter" />
     <!-- 消息监听容器，配置连接工厂,监听器是上面定义的监听器 -->
     <jms:listener-container destination-type="queue" container-type="default" connection-factory="jmsFactory"
-                            concurrency="5-10">
+                            concurrency="5-10" message-converter="messageConverter">
         <jms:listener destination="testSpringQueue" ref="consumerMessageListenerOne" selector="userId='A'"/>
+        <!-- 对于不是javax.jms.MessageListener实现类的普通bean,method中指定方法的参数类型,
+        需要与listener-container中配置的message-converter类中的fromMessage方法返回值的类型相同,否则会出现异常:InvocationTargetException
+         -->
         <jms:listener destination="testSpringQueue" ref="consumerMessageListenerTwo" method="onMessage" selector="userId='B'"/>
     </jms:listener-container>
 </beans>
