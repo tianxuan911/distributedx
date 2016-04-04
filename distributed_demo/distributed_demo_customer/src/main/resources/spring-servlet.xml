@@ -24,7 +24,7 @@
 	  <!--<mvc:resources mapping="/js/**" location="/webapp/WEB-INF/js/" />-->
   	
      <!-- 启动包扫描功能，以便注册带有@Controller、@Service、@repository、@Component等注解的类成为spring的bean -->  
-     <context:component-scan base-package="com.tx.controller, com.tx.service" />
+     <context:component-scan base-package="com.tx.controller, com.tx.service,com.tx.systemmgr" />
      
       <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="10000000000000" />
