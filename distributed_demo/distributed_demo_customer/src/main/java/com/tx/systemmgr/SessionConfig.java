@@ -8,7 +8,7 @@ import redis.clients.jedis.JedisShardInfo;
 /**
  * Created by tianxuan on 16/4/4.
  */
-@EnableRedisHttpSession
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds=7200)
 public class SessionConfig {
     @Bean
     public JedisConnectionFactory connectionFactory() {
