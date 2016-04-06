@@ -187,9 +187,6 @@
         <db-url>jdbc:mysql://localhost:3306/trademark?useUnicode=true&amp;characterEncoding=utf8&amp;allowMultiQueries=true</db-url>
         <db-username>root</db-username>
         <db-password>XXXXX</db-password>
-        <!-- <db-url>jdbc:mysql://dev.eshangbiao.cn:3308/trademark?useUnicode=true&amp;characterEncoding=utf8&amp;allowMultiQueries=true</db-url>
-        <db-username>trademark</db-username>
-        <db-password>Sandwish123</db-password> -->
         <db-maxActive>255</db-maxActive>
         <db-maxIdle>20</db-maxIdle>
         <db-maxWait>100</db-maxWait>
@@ -202,15 +199,6 @@
         <log4j.appender.stdout.Target>System.out</log4j.appender.stdout.Target>
         <log4j.appender.stdout.layout>org.apache.log4j.PatternLayout</log4j.appender.stdout.layout>
         <log4j.appender.stdout.layout.ConversionPattern>%d %p [%c,%L] - %m%n</log4j.appender.stdout.layout.ConversionPattern>
-
-        <log4j.appender.logfile>org.apache.log4j.RollingFileAppender</log4j.appender.logfile>
-        <log4j.appender.logfile.File>${webapp.root}../../tmlogs/lms.log</log4j.appender.logfile.File>
-        <log4j.appender.logfile.MaxFileSize>10240KB</log4j.appender.logfile.MaxFileSize>
-        <!-- Keep three backup files. -->
-        <log4j.appender.logfile.MaxBackupIndex>3</log4j.appender.logfile.MaxBackupIndex>
-        <!-- Pattern to output: date priority [category] - message -->
-        <log4j.appender.logfile.layout>org.apache.log4j.PatternLayout</log4j.appender.logfile.layout>
-        <log4j.appender.logfile.layout.ConversionPattern>%d %p [%c,%L] - %m%n</log4j.appender.logfile.layout.ConversionPattern>
 
         <log4j.logger.java.sql.Connection>DEBUG</log4j.logger.java.sql.Connection>
         <log4j.logger.java.sql.Statement>DEBUG</log4j.logger.java.sql.Statement>
