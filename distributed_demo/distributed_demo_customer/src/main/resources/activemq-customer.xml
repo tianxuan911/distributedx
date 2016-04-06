@@ -11,7 +11,7 @@
         <property name="connectionFactory">
             <bean class="org.apache.activemq.ActiveMQConnectionFactory">
                 <property name="brokerURL">
-                    <value>tcp://localhost:61616</value>
+                    <value>tcp://www.yidianzhengxin.com:61616</value>
                 </property>
             </bean>
         </property>

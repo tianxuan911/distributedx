@@ -1,0 +1,43 @@
+<beans xmlns="http://www.springframework.org/schema/beans"  
+ xmlns:context="http://www.springframework.org/schema/context"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:tx="http://www.springframework.org/schema/tx"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+      http://www.springframework.org/schema/context  
+      http://www.springframework.org/schema/context/spring-context.xsd  
+      http://www.springframework.org/schema/tx
+      http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+	<!-- 通过扫描的模式, 所有的mapper都继承SqlMapper接口的接口， 这样一个bean就可以了 -->
+   	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+       	<property name="basePackage" value="com.*.dao"/>
+       	<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/> 
+   	</bean>
+	<context:property-placeholder location="classpath*:jdbc.properties" />
+	<bean id="dataSource" destroy-method="close"
+		  class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${mysql.jdbc.driverClassName}"/>
+		<property name="url" value="${mysql.jdbc.url}"/>
+		<property name="username" value="${mysql.jdbc.username}"/>
+		<property name="password" value="${mysql.jdbc.password}"/>
+		<property name="maxActive" value="${mysql.jdbc.maxActive}"/>
+		<property name="maxIdle" value="${mysql.jdbc.maxIdle}"/>
+		<property name="maxWait" value="${mysql.jdbc.maxWait}"/>
+		<property name="testWhileIdle" value="true"/>
+		<property name="validationQuery" value="SELECT 1"/>
+		<property name="minEvictableIdleTimeMillis" value="3600000"/>
+		<property name="timeBetweenEvictionRunsMillis" value="600000"/>
+		<property name="numTestsPerEvictionRun" value="${mysql.jdbc.maxActive}"/>
+	</bean>
+	<!-- 配置mybitasSqlSessionFactoryBean -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+	</bean>
+	<!-- 事务支持 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 启动注解驱动事务 -->
+	<tx:annotation-driven transaction-manager="txManager" />
+</beans>
